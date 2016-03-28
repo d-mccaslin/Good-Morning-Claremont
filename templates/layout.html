@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html class="no-js">
+    <head>
+        <title>{% block title %}GMC{% endblock %}</title>
+        <meta name="description" content="Final project for Computing for the Web">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <!--https://css-tricks.com/snippets/html/responsive-meta-tag/-->
+        <link href='http://fonts.googleapis.com/css?family=Varela+Round' rel='stylesheet' type='text/css'>
+        <link rel="stylesheet" href="/static/css/main.css">
+    </head>
+    <body>
+
+        <header>
+          <div class="row">
+            <div class="grid-33">
+              <a href="{{ url_for('index') }}" class="icon-logo1"></a>
+            </div>
+            <div class="grid-33">
+                <h1>Hello{% if current_user.is_authenticated %} {{ current_user.username }}{% endif %}!</h1>
+
+            </div>
+            <div class="grid-33">
+                <!-- Log in/Log out -->
+                {% if current_user.is_authenticated %}
+                <a href="{{ url_for('logout') }}" class="icon-logout" title="Log out"></a>
+              <a href="mailto:ssendyl16@cmc.edu,dmccaslin@cmc.edu?subject=Cool Website" class="icon-email" title="Email"></a>
+                {% else %}
+
+                <a href="{{ url_for('login') }}" class="icon-login" title="Log in"></a>
+                <a href="{{ url_for('register') }}" class="icon-profile1" title="Register"></a>
+                <a href="mailto:ssendyl16@cmc.edu,dmccaslin@cmc.edu?subject=Cool Website" class="icon-email" title="Email"></a>
+                {% endif %}
+            </div>
+          </div>
+
+        </header>
+        <!-- Flash messages -->
+        {% with messages = get_flashed_messages(with_categories=True) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class='notifcation {{ category }}'>{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+
+        <div class="row">
+          <div class="main">
+            <nav id='buttons'>
+              <a href="{{ url_for('index') }}">Community</a>
+                {% if current_user.is_authenticated %}
+                <a href='{{ url_for('feed', username=current_user.username) }}'>Feed</a>
+                <a href='{{ url_for('stream', username=current_user.username) }}'>Profile</a>
+                <a href='{{ url_for('post') }}' class='new'>New Post</a>
+                {% endif %}
+            </nav>
+            {% block content %}{% endblock %}
+          </div>
+        </div>
+
+        <footer>
+          <div class="row">
+            <p>CS40 Final Project<br>by DAVID & SURYA</p>
+          </div>
+        </footer>
+        <script src="/static/js/main.js"></script>
+
+
+    </body>
+</html>
